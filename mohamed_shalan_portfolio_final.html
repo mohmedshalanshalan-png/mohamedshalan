@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mohamed Shalan Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#07111a;--bg2:#0a1820;--bg3:#111e28;
+    --accent:#7c6ef7;--accent2:#a89af9;
+    --text:#f0effe;--muted:#8b9aaa;
+    --border:rgba(124,110,247,0.18);--card:rgba(10,24,35,0.88);
+  }
+  body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+  #bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+  .spotlight{position:fixed;top:0;left:0;right:0;bottom:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 38% 55% at 50% 0%, rgba(160,200,255,0.07) 0%, transparent 70%)}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 3rem;background:rgba(7,17,26,.8);backdrop-filter:blur(20px);border-bottom:.5px solid var(--border)}
+  .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;letter-spacing:-.02em;background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .nav-links{display:flex;gap:2rem;list-style:none}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;transition:color .25s;cursor:pointer}
+  .nav-links a:hover{color:var(--text)}
+
+  section{position:relative;z-index:1}
+
+  #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 4rem}
+  .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(124,110,247,.12);border:.5px solid rgba(124,110,247,.35);border-radius:100px;padding:.45rem 1.2rem;font-size:.8rem;color:var(--accent2);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2rem;animation:fadeUp .6s ease both}
+  .hero-badge::before{content:'';width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+  .hero-name{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,7vw,5.5rem);font-weight:800;line-height:1.05;letter-spacing:-.04em;margin-bottom:.8rem;animation:fadeUp .7s .1s ease both}
+  .hero-name span{background:linear-gradient(135deg,#fff 30%,var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .hero-sub{font-family:'Syne',sans-serif;font-size:clamp(1rem,2.2vw,1.4rem);color:var(--accent2);font-weight:600;letter-spacing:.04em;margin-bottom:1.5rem;animation:fadeUp .7s .18s ease both;opacity:.9}
+  .hero-title{font-size:clamp(.95rem,2vw,1.15rem);color:var(--muted);font-weight:400;margin-bottom:1.5rem;animation:fadeUp .7s .25s ease both}
+  .hero-title strong{color:var(--accent2);font-weight:600}
+  .hero-desc{max-width:540px;color:var(--muted);font-size:.97rem;line-height:1.8;margin:0 auto 3rem;animation:fadeUp .7s .33s ease both}
+  .hero-cta{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeUp .7s .4s ease both}
+  .btn-primary{background:var(--accent);color:#fff;border:none;border-radius:100px;padding:.85rem 2.2rem;font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .25s}
+  .btn-primary:hover{background:var(--accent2);transform:translateY(-2px)}
+  .btn-outline{background:transparent;color:var(--text);border:.5px solid rgba(255,255,255,.2);border-radius:100px;padding:.85rem 2.2rem;font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:500;cursor:pointer;transition:all .25s}
+  .btn-outline:hover{border-color:var(--accent2);color:var(--accent2);transform:translateY(-2px)}
+  .scroll-indicator{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--muted);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;animation:fadeIn 1s 1s both}
+  .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scrollAnim 2s ease infinite}
+  @keyframes scrollAnim{0%{transform:scaleY(0);transform-origin:top;opacity:0}50%{transform:scaleY(1);transform-origin:top;opacity:1}100%{transform:scaleY(1);transform-origin:bottom;opacity:0}}
+
+  .journey-banner{background:rgba(124,110,247,.07);border-top:.5px solid rgba(124,110,247,.2);border-bottom:.5px solid rgba(124,110,247,.2);padding:1.3rem 3rem;text-align:center;font-size:.9rem;color:var(--muted);position:relative;z-index:1}
+  .journey-banner strong{color:var(--accent2)}
+
+  #about{padding:6rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;max-width:1100px;margin:0 auto}
+  .about-label{display:inline-block;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);font-weight:600;margin-bottom:1.2rem}
+  .about-heading{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;line-height:1.15;letter-spacing:-.03em;margin-bottom:1.5rem}
+  .about-text{color:var(--muted);line-height:1.8;font-size:.95rem;margin-bottom:1.5rem}
+  .skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+  .skill-tag{background:var(--bg3);border:.5px solid var(--border);border-radius:10px;padding:.7rem 1rem;font-size:.85rem;color:var(--text);display:flex;align-items:center;gap:.6rem;transition:border-color .25s,transform .2s}
+  .skill-tag:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .skill-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;flex-shrink:0}
+
+  .profile-card{background:var(--card);border:.5px solid var(--border);border-radius:24px;padding:2.5rem;text-align:center;backdrop-filter:blur(20px);position:relative;overflow:hidden}
+  .profile-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent)}
+  .avatar{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#4a3fa0);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:white;margin:0 auto 1.2rem;border:2px solid rgba(124,110,247,.3)}
+  .profile-name{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:.2rem}
+  .profile-role{color:var(--accent2);font-size:.85rem;font-weight:500;margin-bottom:1.5rem;line-height:1.5}
+  .profile-info{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.2rem}
+  .profile-info-row{display:flex;align-items:center;justify-content:center;gap:.5rem;font-size:.82rem;color:var(--muted)}
+  .profile-info-row a{color:var(--muted);text-decoration:none}
+  .profile-info-row a:hover{color:var(--accent2)}
+  .availability{display:flex;align-items:center;justify-content:center;gap:.5rem;font-size:.8rem;color:#5de898;font-weight:500}
+  .avail-dot{width:7px;height:7px;background:#5de898;border-radius:50%;animation:pulse 2s infinite}
+
+  #services{padding:6rem 3rem;max-width:1100px;margin:0 auto}
+  .section-header{text-align:center;margin-bottom:3.5rem}
+  .section-heading{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem}
+  .section-sub{color:var(--muted);font-size:1rem;max-width:480px;margin:0 auto;line-height:1.7}
+  .services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem}
+  .service-card{background:var(--card);border:.5px solid var(--border);border-radius:20px;padding:2rem;backdrop-filter:blur(10px);transition:border-color .3s,transform .25s;cursor:default;position:relative;overflow:hidden}
+  .service-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(124,110,247,.06),transparent 60%);opacity:0;transition:opacity .3s}
+  .service-card:hover{border-color:rgba(124,110,247,.4);transform:translateY(-4px)}
+  .service-card:hover::after{opacity:1}
+  .service-icon{width:48px;height:48px;background:rgba(124,110,247,.12);border:.5px solid rgba(124,110,247,.25);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:1.2rem}
+  .service-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:.7rem}
+  .service-desc{color:var(--muted);font-size:.88rem;line-height:1.7}
+
+  #portfolio{padding:6rem 3rem;max-width:1100px;margin:0 auto}
+  .projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:1.5rem}
+  .project-card{background:var(--bg3);border:.5px solid var(--border);border-radius:20px;overflow:hidden;transition:transform .25s,border-color .3s}
+  .project-card:hover{transform:translateY(-5px);border-color:rgba(124,110,247,.4)}
+  .project-thumb{height:130px;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;overflow:hidden}
+  .project-thumb::before{content:'';position:absolute;inset:0;opacity:.3}
+  .thumb-1::before{background:linear-gradient(135deg,#c8a44a,#8B6914)}
+  .thumb-2::before{background:linear-gradient(135deg,#5de898,#1aab6d)}
+  .thumb-3::before{background:linear-gradient(135deg,#f97c7c,#c0392b)}
+  .project-info{padding:1.2rem 1.3rem}
+  .project-tag{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);font-weight:600;margin-bottom:.4rem;display:flex;align-items:center;justify-content:space-between}
+  .cs-badge{background:rgba(124,110,247,.12);border:.5px solid rgba(124,110,247,.3);border-radius:100px;padding:.2rem .65rem;font-size:.68rem;color:var(--accent2);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+  .project-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.4rem}
+  .project-desc{font-size:.82rem;color:var(--muted);line-height:1.6}
+  .project-location{display:flex;align-items:center;gap:.35rem;font-size:.75rem;color:var(--muted);margin-top:.6rem}
+  .portfolio-note{background:rgba(124,110,247,.06);border:.5px solid rgba(124,110,247,.2);border-radius:16px;padding:1.5rem 2rem;display:flex;align-items:center;gap:1rem;color:var(--muted);font-size:.9rem;line-height:1.6}
+  .portfolio-note-icon{font-size:1.5rem;flex-shrink:0}
+  .portfolio-note strong{color:var(--accent2)}
+
+  #contact{padding:6rem 3rem;text-align:center;position:relative}
+  .contact-card{max-width:640px;margin:0 auto;background:var(--card);border:.5px solid var(--border);border-radius:28px;padding:4rem 3rem;backdrop-filter:blur(20px);position:relative;overflow:hidden}
+  .contact-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent)}
+  .contact-heading{font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;letter-spacing:-.03em;margin-bottom:1rem}
+  .contact-text{color:var(--muted);line-height:1.7;margin-bottom:2.5rem;font-size:.95rem}
+  .contact-links{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+  .contact-link{display:flex;align-items:center;gap:.6rem;background:var(--bg3);border:.5px solid var(--border);border-radius:100px;padding:.7rem 1.5rem;font-size:.88rem;color:var(--text);text-decoration:none;transition:all .25s;cursor:pointer;font-weight:500}
+  .contact-link:hover{border-color:var(--accent);color:var(--accent2);transform:translateY(-2px)}
+
+  footer{border-top:.5px solid var(--border);padding:2rem 3rem;text-align:center;color:var(--muted);font-size:.82rem;position:relative;z-index:1}
+  .section-divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0 3rem;position:relative;z-index:1}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  ::-webkit-scrollbar{width:4px}
+  ::-webkit-scrollbar-track{background:var(--bg)}
+  ::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px}
+
+  @media(max-width:768px){
+    nav{padding:1rem 1.5rem}.nav-links{gap:1rem}
+    #about{grid-template-columns:1fr;gap:2rem;padding:4rem 1.5rem}
+    #services,#portfolio{padding:4rem 1.5rem}
+    .services-grid,.projects-grid{grid-template-columns:1fr}
+    .contact-card{padding:2.5rem 1.5rem}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="spotlight"></div>
+
+<nav>
+  <div class="nav-logo">Mohamed Shalan</div>
+  <ul class="nav-links">
+    <li><a onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">About</a></li>
+    <li><a onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Services</a></li>
+    <li><a onclick="document.getElementById('portfolio').scrollIntoView({behavior:'smooth'})">Work</a></li>
+    <li><a onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-badge">AI Content Creator</div>
+  <h1 class="hero-name"><span>Mohamed Shalan</span></h1>
+  <p class="hero-sub">Content Creator & Script Writer</p>
+  <p class="hero-title">صناعة المحتوى بـ <strong>إبداع بشري</strong> × <strong>ذكاء اصطناعي</strong></p>
+  <p class="hero-desc">أصنع ديزاينات، فيديوهات، إعلانات، وأكتب السكريبت — كل ده بمساعدة أحدث أدوات الذكاء الاصطناعي. مقيم في القليوبية، مصر.</p>
+  <div class="hero-cta">
+    <button class="btn-primary" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">تواصل معايا ←</button>
+    <button class="btn-outline" onclick="document.getElementById('portfolio').scrollIntoView({behavior:'smooth'})">شوف شغلي</button>
+  </div>
+  <div class="scroll-indicator"><div class="scroll-line"></div><span>scroll</span></div>
+</section>
+
+<div class="journey-banner">🚀 <strong>بداية الرحلة</strong> — 3 مشاريع شغّالة دلوقتي في القليوبية. كل خبير اتبدأ من نقطة صفر.</div>
+
+<section id="about">
+  <div>
+    <span class="about-label">عني</span>
+    <h2 class="about-heading">المحتوى اللي بيتكلم عن نفسه</h2>
+    <p class="about-text">أنا Mohamed Shalan، من القليوبية، مصر. بتخصص في صناعة المحتوى الرقمي بمساعدة الذكاء الاصطناعي — من الديزاين والفيديو للإعلانات وكتابة السكريبت.</p>
+    <p class="about-text">بشتغل مع شركات ومنتجات محلية وبساعدهم يوصلوا لجمهورهم بمحتوى احترافي وسريع الإنتاج عن طريق أدوات الـ AI الحديثة.</p>
+    <div class="skills-grid">
+      <div class="skill-tag"><div class="skill-dot"></div>صناعة الديزاين</div>
+      <div class="skill-tag"><div class="skill-dot"></div>تصميم الفيديو</div>
+      <div class="skill-tag"><div class="skill-dot"></div>كتابة الإعلانات</div>
+      <div class="skill-tag"><div class="skill-dot"></div>كتابة السكريبت</div>
+      <div class="skill-tag"><div class="skill-dot"></div>تقديم المحتوى</div>
+      <div class="skill-tag"><div class="skill-dot"></div>أدوات الـ AI</div>
+    </div>
+  </div>
+  <div class="profile-card">
+    <div class="avatar">MS</div>
+    <div class="profile-name">Mohamed Shalan</div>
+    <div class="profile-role">Content Creator & Script Writer<br>القليوبية 🇪🇬</div>
+    <div class="profile-info">
+      <div class="profile-info-row">📧 <a href="mailto:shlanm891@gmail.com">shlanm891@gmail.com</a></div>
+      <div class="profile-info-row">📞 <a href="tel:+201025565221">01025565221</a></div>
+      <div class="profile-info-row">📍 القليوبية، مصر</div>
+    </div>
+    <div class="availability"><div class="avail-dot"></div>متاح للتعاون والمشاريع</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<section id="services">
+  <div class="section-header">
+    <span class="about-label">خدماتي</span>
+    <h2 class="section-heading">إيه اللي بقدمه</h2>
+    <p class="section-sub">محتوى رقمي احترافي بمساعدة الذكاء الاصطناعي — سريع، مبدع، وبيوصل.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card"><div class="service-icon">🎨</div><div class="service-title">صناعة الديزاينات</div><div class="service-desc">تصميمات جرافيك احترافية للمنتجات والبراندات — سوشيال ميديا، إعلانات، وهوية بصرية كاملة بمساعدة أدوات الـ AI.</div></div>
+    <div class="service-card"><div class="service-icon">🎬</div><div class="service-title">تصميم الفيديو</div><div class="service-desc">فيديوهات إعلانية وتسويقية مميزة — من الفكرة للتنفيذ، بأدوات فيديو الذكاء الاصطناعي الحديثة.</div></div>
+    <div class="service-card"><div class="service-icon">📢</div><div class="service-title">كتابة الإعلانات</div><div class="service-desc">نصوص إعلانية مقنعة وجذابة للمنتجات والخدمات — محتوى بيبيع ويوصل للجمهور الصح.</div></div>
+    <div class="service-card"><div class="service-icon">✍️</div><div class="service-title">كتابة السكريبت وتقديم المحتوى</div><div class="service-desc">سكريبتات احترافية للفيديوهات والبودكاست والريلز — مكتوبة بأسلوب طبيعي ومؤثر يشد المشاهد.</div></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<section id="portfolio">
+  <div class="section-header">
+    <span class="about-label">شغلي</span>
+    <h2 class="section-heading">المشاريع الحالية</h2>
+    <p class="section-sub">3 مشاريع شغّالة دلوقتي مع شركات في القليوبية.</p>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card">
+      <div class="project-thumb thumb-1">🍪</div>
+      <div class="project-info">
+        <div class="project-tag">بسكويت بالتمر <span class="cs-badge">جاري</span></div>
+        <div class="project-title">أولكر</div>
+        <div class="project-desc">محتوى إعلاني وديزاينات لمنتج بسكويت التمر — تصميم وفيديو وسكريبت.</div>
+        <div class="project-location">📍 القليوبية، مصر</div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-thumb thumb-2">🧀</div>
+      <div class="project-info">
+        <div class="project-tag">موتزريلا <span class="cs-badge">جاري</span></div>
+        <div class="project-title">الفتح</div>
+        <div class="project-desc">حملة محتوى لمصنع موتزريلا الفتح — إعلانات وفيديوهات ترويجية بالـ AI.</div>
+        <div class="project-location">📍 بنها، القليوبية</div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-thumb thumb-3">🍬</div>
+      <div class="project-info">
+        <div class="project-tag">حلوى <span class="cs-badge">جاري</span></div>
+        <div class="project-title">تويست فضيلي</div>
+        <div class="project-desc">ديزاينات وإعلانات لمنتج تويست فضيلي — محتوى بصري جذاب للسوشيال ميديا.</div>
+        <div class="project-location">📍 القليوبية، مصر</div>
+      </div>
+    </div>
+  </div>
+  <div class="portfolio-note">
+    <div class="portfolio-note-icon">💬</div>
+    <div><strong>المشاريع دي لسه اتنشرتش</strong> — شغّال عليها دلوقتي وهتتنشر قريباً. لو عايز تشوف نماذج من شغلي أو تتعاون معايا، <strong>تواصل معايا</strong> مباشرة.</div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="contact-card">
+    <h2 class="contact-heading">تواصل معايا</h2>
+    <p class="contact-text">عندك منتج أو براند وعايز محتوى احترافي بالذكاء الاصطناعي؟ أنا هنا — ابعتلي وهنتكلم.</p>
+    <div class="contact-links">
+      <a class="contact-link" href="mailto:shlanm891@gmail.com">📧 shlanm891@gmail.com</a>
+      <a class="contact-link" href="tel:+201025565221">📞 01025565221</a>
+    </div>
+  </div>
+</section>
+
+<footer><p>© 2026 Mohamed Shalan · Content Creator & Script Writer · القليوبية، مصر 🇪🇬</p></footer>
+
+<script>
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+class Paper {
+  constructor(fromTop){ this.reset(fromTop); }
+  reset(fromTop){
+    const side = Math.floor(Math.random()*4);
+    if(side===0){ this.x=Math.random()*W; this.y=-120; }
+    else if(side===1){ this.x=W+80; this.y=Math.random()*H; }
+    else if(side===2){ this.x=Math.random()*W; this.y=H+120; }
+    else{ this.x=-80; this.y=Math.random()*H; }
+    if(fromTop){ this.x=Math.random()*W; this.y=-120; }
+    this.w=55+Math.random()*40; this.h=this.w*1.35;
+    this.angle=(Math.random()-0.5)*Math.PI*2;
+    this.rotSpeed=(Math.random()-0.5)*0.008;
+    this.vx=(Math.random()-0.5)*0.5;
+    this.vy=0.2+Math.random()*0.5;
+    this.opacity=0.045+Math.random()*0.07;
+    this.lines=Math.floor(5+Math.random()*6);
+  }
+  update(){
+    this.x+=this.vx; this.y+=this.vy; this.angle+=this.rotSpeed;
+    this.vx+=(Math.random()-0.5)*0.01;
+    if(this.y>H+150||this.x<-150||this.x>W+150) this.reset(true);
+  }
+  draw(){
+    ctx.save();
+    ctx.translate(this.x,this.y);
+    ctx.rotate(this.angle);
+    ctx.globalAlpha=this.opacity;
+    ctx.fillStyle='#b8cfe0';
+    ctx.beginPath();
+    ctx.roundRect(-this.w/2,-this.h/2,this.w,this.h,3);
+    ctx.fill();
+    ctx.strokeStyle='rgba(160,190,210,0.5)';
+    ctx.lineWidth=0.8;
+    const sp=(this.h-16)/(this.lines+1);
+    for(let i=1;i<=this.lines;i++){
+      const ly=-this.h/2+8+i*sp;
+      ctx.beginPath(); ctx.moveTo(-this.w/2+6,ly); ctx.lineTo(this.w/2-6,ly); ctx.stroke();
+    }
+    ctx.strokeStyle='rgba(200,225,245,0.25)'; ctx.lineWidth=0.5;
+    ctx.beginPath(); ctx.roundRect(-this.w/2,-this.h/2,this.w,this.h,3); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+function drawLamp(){
+  const lx=W/2;
+  ctx.save();
+  ctx.strokeStyle='rgba(180,200,220,0.25)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(lx,0); ctx.lineTo(lx,38); ctx.stroke();
+  ctx.fillStyle='rgba(30,50,70,0.9)';
+  ctx.beginPath(); ctx.ellipse(lx,50,28,10,0,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(lx-28,50); ctx.lineTo(lx-18,72); ctx.lineTo(lx+18,72); ctx.lineTo(lx+28,50); ctx.closePath(); ctx.fill();
+  const grad=ctx.createRadialGradient(lx,72,2,lx,72,18);
+  grad.addColorStop(0,'rgba(200,230,255,0.95)'); grad.addColorStop(1,'rgba(160,200,255,0)');
+  ctx.fillStyle=grad; ctx.beginPath(); ctx.ellipse(lx,72,18,8,0,0,Math.PI*2); ctx.fill();
+  const cg=ctx.createRadialGradient(lx,72,0,lx,H*0.65,W*0.38);
+  cg.addColorStop(0,'rgba(160,210,255,0.055)'); cg.addColorStop(0.5,'rgba(140,190,240,0.025)'); cg.addColorStop(1,'rgba(100,160,220,0)');
+  ctx.fillStyle=cg;
+  ctx.beginPath(); ctx.moveTo(lx-18,72); ctx.lineTo(lx-W*0.38,H*0.9); ctx.lineTo(lx+W*0.38,H*0.9); ctx.lineTo(lx+18,72); ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+
+const papers=[];
+for(let i=0;i<18;i++){ const p=new Paper(false); p.x=Math.random()*W; p.y=Math.random()*H; papers.push(p); }
+
+function drawBg(){
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#060f18'); g.addColorStop(0.5,'#091520'); g.addColorStop(1,'#060e17');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+}
+
+function animate(){
+  ctx.clearRect(0,0,W,H);
+  drawBg(); drawLamp();
+  papers.forEach(p=>{ p.update(); p.draw(); });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+</body>
+</html>
